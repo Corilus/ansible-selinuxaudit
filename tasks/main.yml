@@ -21,9 +21,8 @@
 - name: Installed
   action: >
     {{ ansible_pkg_mgr }}
-    name="{{ item }}"
-    state=installed
-  with_items: "{{ auditd_packages }}"
+    name="{{ auditd_packages }}"
+    state=present
   tags:
     - auditd
     - selinux

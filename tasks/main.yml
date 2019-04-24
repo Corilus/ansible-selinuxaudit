@@ -1,0 +1,88 @@
+---
+- name: Set OS dependent variables
+  include_vars: "{{ item }}"
+  with_first_found:
+   - "{{ ansible_distribution }}_{{ ansible_distribution_major_version }}.yml"
+   - "{{ ansible_distribution }}.yml"
+   - "{{ ansible_os_family }}_{{ ansible_distribution_major_version }}.yml"
+   - "{{ ansible_os_family }}.yml"
+   - default.yml
+  tags:
+    - auditd
+    - selinux
+
+- name: OS is supported
+  assert:
+    that: auditd_os_supported == True
+  tags:
+    - auditd
+    - selinux
+
+- name: Installed
+  action: >
+    {{ ansible_pkg_mgr }}
+    name="{{ item }}"
+    state=installed
+  with_items: "{{ auditd_packages }}"
+  tags:
+    - auditd
+    - selinux
+
+- name: SELinux Configuration
+  selinux: policy={{ selinux_policy }} state={{ selinux_state }}
+  tags:
+    - auditd
+    - selinux
+
+- name: auditd Configuration
+  template:
+    src: auditd.conf.j2
+    dest: "{{ auditd_config_file }}"
+    owner: "{{ auditd_config_owner }}"
+    group: "{{ auditd_config_group }}"
+    mode: "{{ auditd_config_mode }}"
+  notify: reload_auditd
+  tags:
+    - auditd
+    - selinux
+
+- name: audispd Configuration
+  template:
+    src: audispd.conf.j2
+    dest: "{{ audispd_config_file }}"
+    owner: "{{ audispd_config_owner }}"
+    group: "{{ audispd_config_group }}"
+    mode: "{{ audispd_config_mode }}"
+  notify: reload_auditd
+  tags:
+    - auditd
+    - selinux
+
+- name: audispd syslog plugin Configuration
+  template:
+    src: syslog.conf.j2
+    dest: "{{ syslog_config_file }}"
+    owner: "{{ syslog_config_owner }}"
+    group: "{{ syslog_config_group }}"
+    mode: "{{ syslog_config_mode }}"
+  notify: reload_auditd
+  tags:
+    - auditd
+    - selinux
+
+- name: Service enabled and started
+  service:
+    name: "{{ auditd_service }}"
+    enabled: true
+    state: started
+  when: auditd_manage_service
+  tags:
+    - auditd
+    - selinux
+
+- name: Register that this role has run
+  set_fact: auditd_has_run=true
+  when: auditd_has_run is not defined
+  tags:
+    - auditd
+    - selinux

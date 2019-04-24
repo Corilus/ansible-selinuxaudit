@@ -1,0 +1,225 @@
+[![Build Status](https://travis-ci.org/Corilus/ansible-selinuxaudit.svg?branch=master)](https://travis-ci.org/Corilus/ansible-selinuxaudit) [![Ansible Galaxy](https://img.shields.io/badge/galaxy-mstefany.auditd-660198.svg?style=flat)](https://galaxy.ansible.com/detail#/role/6941)
+
+Audit Daemon and SELinux Auditing
+=================================
+
+This role configures the SELinux status, policy and Audit daemon:
+
+* By default configures the Audit daemon with the normal OS defaults.
+  And sets default SELinux policy (targeted) and state (Enforcing).
+* Can be configured by dict or simple variables
+* Supports all auditd.conf options. Templates are programmatically generated.
+  (see [meta/make_option_list](meta/make_option_list))
+
+**WARNING** Misconfiguration of this role can halt your system!
+Please test your configuration properly!
+
+Requirements
+------------
+
+Tested on:
+
+* EL 6,7 derived distributions
+* Fedora 23
+
+It will likely work on other flavours and more direct support via suitable
+[vars/](vars/) files is welcome.
+
+Role variables
+---------------
+
+Unconfigured, this role will provide a auditd.conf, audispd.conf, plugins.d/syslog.conf
+that match the OS defaults, but in a different order.
+
+* auditd_skip_defaults
+* audispd_skip_defaults
+* syslog_skip_defaults
+
+If set to True, don't apply default values. This means that you must have a
+complete set of configuration defaults via either the auditd dict, or auditd_key
+variables (audispd dict, or audispd_key variables for audisp, and syslog dict,
+or syslog_key variables for audispd syslog plugin). Defaults to *False*.
+
+* auditd_manage_service
+
+If set to False, the service/daemon won't be touched at all, i.e. will not try
+to enable on boot or start or reload the service.  Defaults to *True* unless
+running inside a docker container (it is assumed ansible is used during build
+phase).
+
+* auditd_allow_reload
+
+If set to False, a reload of auditd wont happen on change. This can help with
+troubleshooting. You'll need to manually reload auditd if you want to apply the
+changed configuration. Defaults to the same value as ``auditd_manage_service``.
+
+* auditd
+* audispd
+* syslog
+
+A dicts containing configuration.  e.g.
+
+```yaml
+auditd:
+  flush: SYNC
+  admin_space_left_action: SUSPEND
+audispd:
+  q_depth: 65536
+```
+
+* auditd_...
+* audispd_...
+
+Simple variables can be used rather than a dict. Simple values override dict
+values. e.g.:
+
+```yaml
+auditd_flush: SYNC
+audispd_q_depth: 65536
+```
+
+* selinux_policy
+
+Can be set to 'targeted' or other policy. Uses libselinux-python to manage /etc/sysconfig/selinux file.
+
+```yaml
+selinux_policy: targeted
+```
+
+* selinux_state
+
+Can be set to 'disabled', 'permissive', or 'enforcing', see previous selinux_policy.
+
+```yaml
+selinux_state: permissive
+```
+
+In all cases, booleans correctly rendered as yes and no in auditd configuration.
+
+
+Dependencies
+------------
+
+None
+
+Example Playbook
+----------------
+
+```yaml
+---
+- hosts: all
+  vars:
+    selinux_state: permissive
+    auditd:
+      flush: DATA
+      freq: 0
+      num_logs: 40
+      max_log_file: 10
+      max_log_file_action: ROTATE
+    audispd:
+      q_depth: 65536
+    syslog:
+      active: yes
+  roles:
+    - role: mstefany.auditd
+```
+
+Results in /etc/audit/auditd.conf:
+
+```
+# Ansible managed: ...
+#
+# This file controls the configuration of the audit daemon
+#
+
+action_mail_acct = root
+admin_space_left = 50
+admin_space_left_action = SUSPEND
+disk_error_action = SUSPEND
+disk_full_action = SUSPEND
+dispatcher = /sbin/audispd
+disp_qos = lossy
+enable_krb5 = no
+flush = DATA
+freq = 0
+krb5_principal = auditd
+log_file = /var/log/audit/audit.log
+log_format = RAW
+log_group = root
+max_log_file = 10
+max_log_file_action = ROTATE
+name_format = NONE
+num_logs = 40
+priority_boost = 4
+space_left = 75
+space_left_action = SYSLOG
+tcp_client_max_idle = 0
+tcp_listen_queue = 5
+tcp_max_per_addr = 1
+use_libwrap = yes
+```
+
+/etc/audisp/audispd.conf:
+
+```
+# Ansible managed: ...
+#
+# This file controls the configuration of the audit event 
+# dispatcher daemon, audispd.
+#
+
+max_restarts = 10
+name_format = HOSTNAME
+overflow_action = SYSLOG
+priority_boost = 4
+q_depth = 150
+```
+
+/etc/audisp/plugins.d/syslog.conf
+
+```
+# Ansible managed: ...
+# This file controls the configuration of the syslog plugin.
+# It simply takes events and writes them to syslog. The
+# arguments provided can be the default priority that you
+# want the events written with. And optionally, you can give
+# a second argument indicating the facility that you want events
+# logged to. Valid options are LOG_LOCAL0 through 7.
+
+active = yes
+args = LOG_INFO
+direction = out
+format = string
+path = builtin_syslog
+type = builtin
+```
+
+and SELinux in permissive state.
+
+
+Template Generation
+-------------------
+
+The [auditd.conf.j2](templates/auditd.conf.j2), [audispd.conf.j2](templates/audispd.conf.j2),
+[syslog.conf.j2](templates/syslog.conf.j2) templates are programatically
+generated by the script in meta. New options should be added to the
+options_audit for auditd, to the options_audisp for audispd, and to the options_syslog for syslog plugin.
+
+To regenerate the template, from within the meta/ directory run:
+```
+./make_option_list
+```
+
+License
+-------
+
+LGPLv3
+
+
+Author
+------
+
+Martin Stefany <martin@stefany.eu>
+
+I'd like to thank Matt Willsher <matt@willsher.systems> for his ansible-sshd which I used as starting point.
+

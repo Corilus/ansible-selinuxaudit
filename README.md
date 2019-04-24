@@ -1,12 +1,11 @@
 [![Build Status](https://travis-ci.org/Corilus/ansible-selinuxaudit.svg?branch=master)](https://travis-ci.org/Corilus/ansible-selinuxaudit)
 
-Audit Daemon and SELinux Auditing
-=================================
+Audit Daemon configuration
+==========================
 
-This role configures the SELinux status, policy and Audit daemon:
+This role configures the Audit daemon:
 
 * By default configures the Audit daemon with the normal OS defaults.
-  And sets default SELinux policy (targeted) and state (Enforcing).
 * Can be configured by dict or simple variables
 * Supports all auditd.conf options. Templates are programmatically generated.
   (see [meta/make_option_list](meta/make_option_list))
@@ -78,22 +77,6 @@ auditd_flush: SYNC
 audispd_q_depth: 65536
 ```
 
-* selinux_policy
-
-Can be set to 'targeted' or other policy. Uses libselinux-python to manage /etc/sysconfig/selinux file.
-
-```yaml
-selinux_policy: targeted
-```
-
-* selinux_state
-
-Can be set to 'disabled', 'permissive', or 'enforcing', see previous selinux_policy.
-
-```yaml
-selinux_state: permissive
-```
-
 In all cases, booleans correctly rendered as yes and no in auditd configuration.
 
 
@@ -109,7 +92,6 @@ Example Playbook
 ---
 - hosts: all
   vars:
-    selinux_state: permissive
     auditd:
       flush: DATA
       freq: 0
@@ -121,7 +103,7 @@ Example Playbook
     syslog:
       active: yes
   roles:
-    - role: mstefany.auditd
+    - role: corilus.auditd
 ```
 
 Results in /etc/audit/auditd.conf:
@@ -194,9 +176,6 @@ path = builtin_syslog
 type = builtin
 ```
 
-and SELinux in permissive state.
-
-
 Template Generation
 -------------------
 
@@ -220,6 +199,7 @@ Author
 ------
 
 Martin Stefany <martin@stefany.eu>
+Dennis Wagelaar <dennis.wagelaar@corilus.be>
 
 I'd like to thank Matt Willsher <matt@willsher.systems> for his ansible-sshd which I used as starting point.
 

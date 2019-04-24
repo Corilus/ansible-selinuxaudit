@@ -1,8 +1,6 @@
 ---
 auditd_packages:
   - auditd
-  - selinux
-  - python-selinux
 auditd_defaults:
   action_mail_acct: root
   admin_space_left: 50

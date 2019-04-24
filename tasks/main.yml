@@ -27,12 +27,6 @@
     - auditd
     - selinux
 
-- name: SELinux Configuration
-  selinux: policy={{ selinux_policy }} state={{ selinux_state }}
-  tags:
-    - auditd
-    - selinux
-
 - name: auditd Configuration
   template:
     src: auditd.conf.j2

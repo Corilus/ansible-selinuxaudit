@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/Corilus/ansible-selinuxaudit.svg?branch=master)](https://travis-ci.org/Corilus/ansible-selinuxaudit) [![Ansible Galaxy](https://img.shields.io/badge/galaxy-mstefany.auditd-660198.svg?style=flat)](https://galaxy.ansible.com/detail#/role/6941)
+[![Build Status](https://travis-ci.org/Corilus/ansible-selinuxaudit.svg?branch=master)](https://travis-ci.org/Corilus/ansible-selinuxaudit)
 
 Audit Daemon and SELinux Auditing
 =================================

@@ -198,7 +198,7 @@ LGPLv3
 Author
 ------
 
-Martin Stefany <martin@stefany.eu>
+Martin Stefany <martin@stefany.eu>  
 Dennis Wagelaar <dennis.wagelaar@corilus.be>
 
 I'd like to thank Matt Willsher <matt@willsher.systems> for his ansible-sshd which I used as starting point.

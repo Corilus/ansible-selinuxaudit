@@ -103,7 +103,7 @@ Example Playbook
     syslog:
       active: yes
   roles:
-    - role: corilus.auditd
+    - role: dwagelaar.auditd
 ```
 
 Results in /etc/audit/auditd.conf:

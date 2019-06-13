@@ -1,6 +1,8 @@
 ---
 galaxy_info:
-  author: Corilus
+  role_name: auditd
+  author: Dennis Wagelaar
+  company: Corilus
   description: AuditD configuration
   license: LGPLv3
   min_ansible_version: 1.8

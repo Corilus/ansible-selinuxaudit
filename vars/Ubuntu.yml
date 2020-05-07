@@ -45,3 +45,4 @@ syslog_defaults:
   path: builtin_syslog
   type: builtin
 auditd_os_supported: yes
+use_audisp: yes

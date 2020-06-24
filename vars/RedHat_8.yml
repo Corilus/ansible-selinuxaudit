@@ -1,6 +1,7 @@
 ---
 auditd_packages:
   - audit
+  - audispd-plugins
 auditd_defaults:
   action_mail_acct: root
   admin_space_left: 50
@@ -32,4 +33,5 @@ auditd_defaults:
   tcp_max_per_addr: 1
   use_libwrap: True
 auditd_os_supported: yes
-use_audisp: no
+syslog_config_file: /etc/audit/plugins.d/syslog.conf
+audisp_not_plugin: no

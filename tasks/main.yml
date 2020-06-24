@@ -50,7 +50,7 @@
   tags:
     - auditd
     - selinux
-  when: use_audisp
+  when: audisp_not_plugin
 
 - name: audispd syslog plugin Configuration
   template:
@@ -63,7 +63,6 @@
   tags:
     - auditd
     - selinux
-  when: use_audisp
 
 - name: Service enabled and started
   service:

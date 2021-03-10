@@ -1,5 +1,6 @@
 0.1.2 10 March 2021 Dennis Wagelaar <dennis.wagelaar@...>
 - Use "package" module
+- Use augenrules instead of auditd reload
 
 0.1.1 24 June 2020 Jen Van Deynse <jens.vandeynse@...>
 - CentOS8 audit forwarding fixes

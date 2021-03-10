@@ -1,6 +1,4 @@
 ---
 - name: reload_auditd
-  service:
-    name: "{{ auditd_service }}"
-    state: reloaded
+  command: /sbin/augenrules --load
   when: auditd_allow_reload

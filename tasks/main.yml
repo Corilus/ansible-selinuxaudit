@@ -18,11 +18,10 @@
     - auditd
     - selinux
 
-- name: Installed
-  action: >
-    {{ ansible_pkg_mgr }}
-    name="{{ auditd_packages }}"
-    state=present
+- name: Install packages
+  package:
+    name: "{{ auditd_packages }}"
+    state: present
   tags:
     - auditd
     - selinux
@@ -75,7 +74,8 @@
     - selinux
 
 - name: Register that this role has run
-  set_fact: auditd_has_run=true
+  set_fact:
+    auditd_has_run: true
   when: auditd_has_run is not defined
   tags:
     - auditd

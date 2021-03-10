@@ -1,2 +1,8 @@
+0.1.2 10 March 2021 Dennis Wagelaar <dennis.wagelaar@...>
+- Use "package" module
+
+0.1.1 24 June 2020 Jen Van Deynse <jens.vandeynse@...>
+- CentOS8 audit forwarding fixes
+
 0.1.0 9 Januar 2016 Martin Stefany <martin@...>
 - Initial release

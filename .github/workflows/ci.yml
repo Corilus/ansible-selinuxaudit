@@ -6,7 +6,7 @@ on:
 
 jobs:
   ansible:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
       - name: Check out repository
@@ -15,7 +15,7 @@ jobs:
       - name: Install Ansible
         run: |
           sudo apt-get update
-          sudo apt-get install -y ansible
+          sudo apt-get install -y ansible audispd-plugins
 
       - name: Configure Ansible roles path
         run: |

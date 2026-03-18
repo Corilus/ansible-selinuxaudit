@@ -1,4 +1,10 @@
 ---
+- name: Print OS distribution/version
+  debug:
+    msg:
+      - "distribution/version: {{ ansible_distribution }}_{{ ansible_distribution_major_version }}"
+      - "family/version: {{ ansible_os_family }}_{{ ansible_distribution_major_version }}"
+
 - name: Set OS dependent variables
   include_vars: "{{ item }}"
   with_first_found:

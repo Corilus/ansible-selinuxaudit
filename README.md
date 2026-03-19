@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/Corilus/ansible-selinuxaudit.svg?branch=master)](https://travis-ci.com/Corilus/ansible-selinuxaudit)
+[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/Corilus/ansible-selinuxaudit/ci.yml?logo=github)](https://github.com/Corilus/ansible-selinuxaudit/actions/workflows/ci.yml)
 
 Audit Daemon configuration
 ==========================
@@ -146,7 +146,7 @@ use_libwrap = yes
 ```
 # Ansible managed: ...
 #
-# This file controls the configuration of the audit event 
+# This file controls the configuration of the audit event
 # dispatcher daemon, audispd.
 #
 
@@ -198,7 +198,7 @@ LGPLv3
 Author
 ------
 
-Martin Stefany <martin@stefany.eu>  
+Martin Stefany <martin@stefany.eu>
 Dennis Wagelaar <dennis.wagelaar@corilus.be>
 
 I'd like to thank Matt Willsher <matt@willsher.systems> for his ansible-sshd which I used as starting point.
